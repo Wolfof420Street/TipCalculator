@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -16,6 +17,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button calculateButton;
     private TextView resultTextView;
     private TextView percentageTextView;
+    private int seekBarPercentage;
+    private float enteredBillFloat;
+    private TextView totalBill;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         calculateButton = (Button) findViewById(R.id.calculateButton);
         resultTextView = (TextView) findViewById(R.id.resultId);
         percentageTextView = (TextView) findViewById(R.id.percentageTextView);
+        totalBill = (TextView) findViewById(R.id.totalTextView);
 
         calculateButton.setOnClickListener(this);
 
@@ -40,10 +45,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+
+                seekBarPercentage = seekBar.getProgress();
 
             }
         });
@@ -51,6 +59,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        calculate();
+
+    }
+
+    public void calculate () {
+
+        float result = 0.0f;
+
+        if (!enteredAmount.getText().toString().equals("")) {
+            enteredBillFloat = Float.parseFloat(enteredAmount.getText().toString());
+            result = enteredBillFloat*seekBarPercentage/ 100;
+            resultTextView.setText("Your tip will be " +"" + "ksh" + " " + String.valueOf(result));
+            totalBill.setText("Total BIll:" + (enteredBillFloat + result));
+        } else {
+            Toast.makeText(MainActivity.this, "Please Enter A valid amount", Toast.LENGTH_LONG).show();
+        }
+
 
     }
 }
